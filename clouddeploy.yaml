@@ -1,0 +1,17 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: hack-gke-deploy-pipeline
+description: "hack GKE Deploy Pipeline"
+serialPipeline:
+  stages:
+    - targetId: hack-deploy
+      profiles: []
+---
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: hack-deploy
+description: "hack Deploy Target - GKE Cluster"
+gke:
+  cluster: projects/hackthefuture25lon-124/locations/europe-west1/clusters/hack-gke-cluster

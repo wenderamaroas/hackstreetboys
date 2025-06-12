@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: onlineboutique
+
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: onlineboutique-managed-cert
+  namespace: onlineboutique
+spec:
+  domains:
+    - hack-89lcju.endpoints.hackthefuture25lon-124.cloud.goog
+
+---
+kind: Gateway
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: onlineboutique-external-https
+  namespace: onlineboutique
+spec:
+  gatewayClassName: gke-l7-global-external-managed
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        options:
+          networking.gke.io/pre-shared-certs: onlineboutique-cert
+  addresses:
+    - type: NamedAddress
+      value: onlineboutique-ip-address
+
+---
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1beta1
+metadata:
+  name: onlineboutique-frontend-external-route
+  namespace: onlineboutique
+  labels:
+    gateway: onlineboutique-external-https
+spec:
+  parentRefs:
+    - name: onlineboutique-external-https
+  hostnames:
+    - "hack-89lcju.endpoints.hackthefuture25lon-124.cloud.goog"
+  rules:
+    - backendRefs:
+        - name: frontend
+          port: 80
