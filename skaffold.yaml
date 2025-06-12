@@ -116,3 +116,24 @@ profiles:
       diskSizeGb: 300
       machineType: N1_HIGHCPU_32
       timeout: 4000s
+---
+apiVersion: skaffold/v4beta9
+kind: Config
+manifests:
+  rawYaml:
+    - onlineboutique.yaml
+  helm:
+    releases:
+      - name: onlineboutique
+        namespace: onlineboutique
+        remoteChart: oci://us-docker.pkg.dev/online-boutique-ci/charts/onlineboutique
+        version: 0.10.2
+        setValues:
+          frontend.externalService: false
+deploy:
+  kubectl:
+    flags:
+      apply:
+        - --server-side # Avoid the "Too long: must have at most 262144 bytes" problem
+        - --force-conflicts
+  tolerateFailuresUntilDeadline: true # Fixes startup timeouts

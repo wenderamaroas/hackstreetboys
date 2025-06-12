@@ -26,6 +26,12 @@
 # `gcloud builds submit --config=cloudbuild.yaml --substitutions=_ZONE=us-central1-b,_CLUSTER=demo-app-staging .`
 
 steps:
+- id: 'Configure Docker for Artifact Registry'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['auth', 'configure-docker', 'europe-west1-docker.pkg.dev']
+- id: 'Configure Docker for GCR (fallback)'
+  name: 'gcr.io/cloud-builders/gcloud'
+  args: ['auth', 'configure-docker', 'gcr.io']
 - id: 'Deploy application to cluster'
   name: 'gcr.io/k8s-skaffold/skaffold:v2.14.1'
   entrypoint: 'bash'
@@ -33,7 +39,7 @@ steps:
   - '-c'
   - >
     gcloud container clusters get-credentials hack-gke-cluster --region europe-west1 --project hackthefuture25lon-124;
-    skaffold run -f=skaffold.yaml --default-repo=gcr.io/$PROJECT_ID;
+    skaffold run -f=skaffold.yaml --default-repo=europe-west1-docker.pkg.dev/hackthefuture25lon-124/images;
 
 # Add more power, and more time, for heavy Skaffold build
 timeout: '3600s'
