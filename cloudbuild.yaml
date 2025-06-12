@@ -29,9 +29,7 @@ steps:
 - id: 'Configure Docker for Artifact Registry'
   name: 'gcr.io/cloud-builders/gcloud'
   args: ['auth', 'configure-docker', 'europe-west1-docker.pkg.dev']
-- id: 'Configure Docker for GCR (fallback)'
-  name: 'gcr.io/cloud-builders/gcloud'
-  args: ['auth', 'configure-docker', 'gcr.io']
+
 - id: 'Deploy application to cluster'
   name: 'gcr.io/k8s-skaffold/skaffold:v2.14.1'
   entrypoint: 'bash'

@@ -121,7 +121,7 @@ apiVersion: skaffold/v4beta9
 kind: Config
 manifests:
   rawYaml:
-    - onlineboutique.yaml
+    - ./kubernetes-manifests/onlineboutique.yaml
   helm:
     releases:
       - name: onlineboutique
@@ -136,4 +136,3 @@ deploy:
       apply:
         - --server-side # Avoid the "Too long: must have at most 262144 bytes" problem
         - --force-conflicts
-  tolerateFailuresUntilDeadline: true # Fixes startup timeouts
