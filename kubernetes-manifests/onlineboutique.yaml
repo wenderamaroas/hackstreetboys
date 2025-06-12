@@ -8,7 +8,7 @@ apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
   name: onlineboutique-managed-cert
-  namespace: onlineboutique
+  # namespace: onlineboutique
 spec:
   domains:
     - hack-89lcju.endpoints.hackthefuture25lon-124.cloud.goog
@@ -18,7 +18,7 @@ kind: Gateway
 apiVersion: gateway.networking.k8s.io/v1beta1
 metadata:
   name: onlineboutique-external-https
-  namespace: onlineboutique
+  # namespace: onlineboutique
 spec:
   gatewayClassName: gke-l7-global-external-managed
   listeners:
@@ -38,7 +38,7 @@ kind: HTTPRoute
 apiVersion: gateway.networking.k8s.io/v1beta1
 metadata:
   name: onlineboutique-frontend-external-route
-  namespace: onlineboutique
+  # namespace: onlineboutique
   labels:
     gateway: onlineboutique-external-https
 spec:
